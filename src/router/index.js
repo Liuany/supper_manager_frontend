@@ -7,62 +7,80 @@ const routes = [
     {
         path: '/',
         name: 'Home',
+        meta: {requireAuth: true},
         component: () => import('@/views/Home'),
         redirect: '/1-1',
         children:[{
             path: '/1-1',
             name: 'memberInfo',
+            meta: {requireAuth: true},
             component: () => import('@/components/MemberInfo')
         },{
             path: '/1-2-1',
             name: 'a',
+            meta: {requireAuth: true},
             component: () => import('@/views/Demo')
         },{
             path: '/1-2-2',
             name: 'b',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/1-2-3',
             name: 'c',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/2-1',
             name: 'd',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/2-2',
             name: 'e',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/2-3',
             name: 'f',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/2-4',
             name: 'g',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/3-1',
             name: 'h',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/3-2',
             name: 'i',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/4-1',
             name: 'j',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         },{
             path: '/4-2',
             name: 'k',
-            component: () => import('@/components/Defualt')
+            meta: {requireAuth: true},
+            component: () => import('@/views/error/404')
         }]
     },
     {
         path: '/register',
-        name: 'register',
+        name: 'Register',
         component: () => import('@/views/auth/Register'),
+        meta: {title:'注册'}
+    },{
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/views/auth/Login'),
         meta: {title:'注册'}
     },{
         path: '/404',

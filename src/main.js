@@ -16,6 +16,21 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+    if(to.meta.requireAuth){
+        if (store.state.user.token) {
+            next()
+        } else {
+            next({
+                path: '/login',
+                query: {redirect: to.fullPath}
+            })
+        }
+    } else {
+        next()
+    }
+})
+
 new Vue({
     router,
     store,
