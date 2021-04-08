@@ -75,6 +75,8 @@ export default {
                             duration: 2000,
                         });
 
+                        this.$store.dispatch("user/getInfo")
+
                         setTimeout(() => {
                             this.loading = false
                             this.$router.push({path: this.redirect || "/"})

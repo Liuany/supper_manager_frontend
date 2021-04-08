@@ -30,7 +30,6 @@ const actions = {
                 resolve();
             })
             .catch((error) => {
-                alert("出错啦");
                 reject(error);
             });
         });
@@ -48,10 +47,7 @@ const actions = {
                     reject("认证失败，请重新登录！");
                 }
                 commit("SET_USER_STATE", data);
-                commit("SET_TOKEN_STATE","");
-                commit("SET_USER_STATE","");
-                removeToken();
-                resolve();
+                resolve(data);
             })
             .catch((error) => {
                 reject(error);
