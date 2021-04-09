@@ -7,7 +7,7 @@
 
 <script>
     // @ is an alias to /src
-    import HelloWorld from '@/components/Menu.vue'
+    import HelloWorld from '@/components/Menu/Menu.vue'
 
     export default {
         name: 'Menu',

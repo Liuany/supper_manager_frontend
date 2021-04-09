@@ -12,7 +12,7 @@
         <el-button @click="createInfo" type="primary" th:icon="el-icon-search" style="margin-left: 15px;">查询</el-button>
         <el-button type="success" th:icon="el-icon-plus" v-on:click="createInfo">新增</el-button>
 
-        <el-table :data="info" style="text-align: center; width: 100%;margin-top: 20px;" :border="true"
+        <el-table :data="info" style="text-align: center; width: 100%;margin-top: 20px;" :border="true" :height="525+'px'"
                   :stripe="true" :highlight-current-row="true">
             <el-table-column type="selection"></el-table-column>
             <el-table-column type="index" label="序号"></el-table-column>
@@ -24,6 +24,15 @@
             <el-table-column prop="level" label="会员级别" :formatter="formatterLevel"></el-table-column>
             <el-table-column prop="address" label="住址"></el-table-column>
         </el-table>
+
+        <!--分页-->
+        <pagination
+            v-show="true"
+            :total="page.total"
+            :page.sync="page.current"
+            :limit.sync="page.size"
+            @pagination="init"
+        />
 
         <el-dialog title="新增" :visible.sync="dialogTableVisible" width="40%">
             <el-form :model="results" label-width="100px">
@@ -63,9 +72,11 @@
 
 <script>
     import {getMemberInfo} from '@/api/memberInfo'
+    import Pagination from '@/components/Pagination'
 
     export default {
         name: "MemberInfo",
+        components: { Pagination },
         data() {
             return {
                 con: '',
@@ -73,11 +84,17 @@
                 results:{},
                 info: [],
                 displayType: '',
-                levels: []
+                levels: [],
+                page: {
+                    current: 1,
+                    size: 10,
+                    total: 0,
+                    tab: 'latest'
+                }
             }
         },
-        mounted() {
-            this.fetchMemberInfo();
+        created() {
+            this.init();
             this.levels.push({name: "白银会员", value: "1"});
             this.levels.push({name: "黄金会员", value: "2"});
             this.levels.push({name: "铂金会员", value: "3"});
@@ -87,10 +104,14 @@
             createInfo: function () {
                 this.dialogTableVisible = true;
             },
-            async fetchMemberInfo () {
-                getMemberInfo().then((value) => {
-                    const { data } = value
-                    this.info.push(data);
+            init: function () {
+                getMemberInfo(this.page.current, this.page.size).then((response) => {
+                    const { data } = response
+                    this.page.current = data.current
+                    this.page.total = data.total
+                    this.page.size = data.size
+                    this.info = data.records
+                    console.log(this.info)
                 })
             },
             save: function () {

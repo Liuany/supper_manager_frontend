@@ -6,7 +6,7 @@
     >
       <template slot="brand">
         <b-navbar-item tag="div">
-          <img :src="doubaoImg" alt="logo">
+          <img :src="logImg" alt="logo">
         </b-navbar-item>
 
         <b-navbar-item
@@ -14,6 +14,7 @@
           tag="router-link"
           :to="{ path: '/' }"
         >
+          主页
         </b-navbar-item>
       </template>
       <template slot="start">
@@ -26,6 +27,40 @@
       </template>
 
       <template slot="end">
+        <b-navbar-item tag="div">
+          <b-field position="is-centered">
+            <b-input
+              v-model="searchKey"
+              class="s_input"
+              width="80%"
+              placeholder="搜索查询内容"
+              rounded
+              clearable
+              @keyup.enter.native="search()"
+            />
+
+            <p class="control">
+              <b-button
+                class="is-info"
+                @click="search()"
+              >检索
+              </b-button>
+            </p>
+          </b-field>
+        </b-navbar-item>
+
+        <b-navbar-item tag="div">
+          <b-switch
+            v-model="darkMode"
+            passive-type="is-warning"
+            type="is-dark"
+          >
+            {{ darkMode ? "夜" : "日" }}
+          </b-switch>
+        </b-navbar-item>
+        <figure class="image is-48x48" style="margin:5px;">
+          <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+        </figure>
         <b-navbar-item
           v-if="token == null || token === ''"
           tag="div"
@@ -47,10 +82,10 @@
             </b-button>
           </div>
         </b-navbar-item>
-
+        
         <b-navbar-dropdown
           v-else
-          :label="user.alias"
+          :label="`你好！` + user.nikeName"
         >
           <b-navbar-item
             tag="router-link"
@@ -78,6 +113,7 @@
 </template>
 
 <script>
+import { disable as disableDarkMode, enable as enableDarkMode } from 'darkreader'
 import { getDarkMode, setDarkMode } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 
@@ -85,14 +121,33 @@ export default {
   name: 'Header',
   data() {
     return {
-      logoUrl: require('@/assets/logo.png'),
-      doubaoImg: require('@/assets/image/doubao.png'),
+      logImg: require('@/assets/image/doubao.png'),
       searchKey: '',
       darkMode: false
     }
   },
   computed: {
     ...mapGetters(['token', 'user'])
+  },
+  watch: {
+    // 监听Theme模式
+    darkMode(val) {
+      if (val) {
+        enableDarkMode({})
+      } else {
+        disableDarkMode()
+      }
+      setDarkMode(this.darkMode)
+    }
+  },
+  created() {
+    // 获取cookie中的夜间还是白天模式
+    this.darkMode = getDarkMode()
+    if (this.darkMode) {
+      enableDarkMode({})
+    } else {
+      disableDarkMode()
+    }
   },
   methods: {
     async logout() {

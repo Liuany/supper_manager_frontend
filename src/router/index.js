@@ -7,18 +7,18 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        meta: {requireAuth: true},
+        meta: {title: '首页'},
         component: () => import('@/views/Home'),
         redirect: '/1-1',
         children:[{
             path: '/1-1',
             name: 'memberInfo',
-            meta: {requireAuth: true},
-            component: () => import('@/components/MemberInfo')
+            meta: {title: 'VIP信息'},
+            component: () => import('@/components/MemberInfo/MemberInfo')
         },{
             path: '/1-2-1',
             name: 'a',
-            meta: {requireAuth: true},
+            meta: {title: '演示页面'},
             component: () => import('@/views/Demo')
         },{
             path: '/1-2-2',
@@ -81,7 +81,7 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/views/auth/Login'),
-        meta: {title:'注册'}
+        meta: {title:'登录'}
     },{
         path: '/404',
         name: '404',
@@ -93,7 +93,13 @@ const routes = [
         redirect: '/404',
         hidden: true
     }
-]
+];
+
+//捕捉跳转异常，使不报错
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
 
 const router = new VueRouter({
     routes

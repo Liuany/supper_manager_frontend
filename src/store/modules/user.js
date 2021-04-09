@@ -18,12 +18,10 @@ const mutations = {
 const actions = {
     // 用户登录
     login({ commit }, userInfo) {
-        console.log(userInfo);
         const {userName, passWord, rememberMe } = userInfo;
         return new Promise((resolve, reject) => {
             login({userName: userName.trim(), passWord: passWord, rememberMe: rememberMe})
             .then((response) => {
-                console.log(response);
                 const { data } = response;
                 commit ("SET_TOKEN_STATE", data.token);
                 setToken(data.token);
@@ -59,7 +57,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             logout(state.token)
               .then((response) => {
-                console.log(response);
                 commit("SET_TOKEN_STATE", "");
                 commit("SET_USER_STATE", "");
                 removeToken();
