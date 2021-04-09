@@ -12,7 +12,7 @@
         <el-button @click="createInfo" type="primary" th:icon="el-icon-search" style="margin-left: 15px;">查询</el-button>
         <el-button type="success" th:icon="el-icon-plus" v-on:click="createInfo">新增</el-button>
 
-        <el-table :data="info" style="text-align: center; width: 100%;margin-top: 20px;" :border="true" :height="525+'px'"
+        <el-table :data="info" style="text-align: center; width: 100%;margin-top: 20px;" :border="true"
                   :stripe="true" :highlight-current-row="true">
             <el-table-column type="selection"></el-table-column>
             <el-table-column type="index" label="序号"></el-table-column>
