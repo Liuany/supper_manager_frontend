@@ -111,7 +111,6 @@
                     this.page.total = data.total
                     this.page.size = data.size
                     this.info = data.records
-                    console.log(this.info)
                 })
             },
             save: function () {

@@ -3,16 +3,16 @@
         <el-row class="tac">
             <el-col :span="4">
                 <el-menu router
-                         :default-active="$route.path"
+                         :default-active="this.$route.path"
                          class="el-menu-vertical-demo"
                          @open="handleOpen"
                          @close="handleClose">
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-s-custom"></i><span>会员管理</span></template>
-                        <el-menu-item index="1-1"><i class="el-icon-collection-tag"></i><span>会员信息</span></el-menu-item>
+                        <el-menu-item index="/memberInfo"><i class="el-icon-collection-tag"></i><span>会员信息</span></el-menu-item>
                         <el-submenu index="1-2">
                             <template slot="title"><i class="el-icon-shopping-cart-2"></i><span>消费记录</span></template>
-                            <el-menu-item index="1-2-1">月消费</el-menu-item>
+                            <el-menu-item index="/monthExpense">月消费</el-menu-item>
                             <el-menu-item index="1-2-2">季度消费</el-menu-item>
                             <el-menu-item index="1-2-3">年消费</el-menu-item>
                         </el-submenu>

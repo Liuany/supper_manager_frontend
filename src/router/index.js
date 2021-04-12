@@ -9,32 +9,37 @@ const routes = [
         name: 'Home',
         meta: {title: '首页'},
         component: () => import('@/views/Home'),
-        redirect: '/1-1',
+        redirect: '/memberInfo',
         children:[{
-            path: '/1-1',
+            path: '/memberInfo',
             name: 'memberInfo',
-            meta: {title: 'VIP信息'},
+            meta: {title: '会员信息'},
             component: () => import('@/components/MemberInfo/MemberInfo')
         },{
-            path: '/1-2-1',
-            name: 'a',
+            path: '/dayExpense',
+            name: 'dayExpense',
             meta: {title: '演示页面'},
             component: () => import('@/views/Demo')
         },{
-            path: '/1-2-2',
+            path: '/monthExpense',
+            name: 'monthExpense',
+            meta: {title: '演示页面'},
+            component: () => import('@/views/Demo')
+        },{
+            path: '/quarterExpense',
             name: 'b',
             meta: {requireAuth: true},
             component: () => import('@/views/error/404')
         },{
-            path: '/1-2-3',
+            path: '/yearExpense',
             name: 'c',
             meta: {requireAuth: true},
             component: () => import('@/views/error/404')
         },{
-            path: '/2-1',
+            path: '/menuMananager',
             name: 'd',
             meta: {requireAuth: true},
-            component: () => import('@/views/error/404')
+            component: () => import('@/components/Menu/MenuManager')
         },{
             path: '/2-2',
             name: 'e',

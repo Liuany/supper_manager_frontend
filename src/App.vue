@@ -5,7 +5,7 @@
         </div>
 
         <div id="app" class="container context">
-            <router-view :key="this.$route.fullPath"></router-view>
+            <router-view></router-view>
         </div>
 
         <!-- <div>
