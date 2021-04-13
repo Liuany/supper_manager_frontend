@@ -22,3 +22,19 @@ export function save(data) {
         data: data
     });
 }
+
+export function getByPid (pid) {
+    return request({
+        url: 'sys/menu/getByPid',
+        method:'get',
+        params: {pid: pid}
+    })
+}
+
+export function delById (id) {
+    return request({
+        url: 'sys/menu/delById',
+        method:'delete',
+        params: {id: id}
+    })
+}

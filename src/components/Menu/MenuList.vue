@@ -52,7 +52,7 @@ export default {
         init(){
             loadMenu().then((response) => {
                 const { data } = response
-                this.menuList = this.formateMenu(data)
+                this.menuList  = this.formateMenu(data)
             })
         },
         handleOpen(key, keyPath) {
@@ -66,7 +66,7 @@ export default {
             var groupNodeMap = {}
             for (let f in data) {
                 var groupName = data[f].name;
-                if (groupNodeMap[groupName] === undefined && data[f].pid === null) {
+                if (groupNodeMap[groupName] === undefined && (data[f].pid === '0')) {
                     var node = {
                         id: data[f].id,
                         name: groupName,

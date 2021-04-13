@@ -12,6 +12,12 @@ import '@/assets/app.css'
 import '@/permission'
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+//e-icon-picker
+import iconPicker from 'e-icon-picker';
+import "e-icon-picker/dist/symbol.js";
+import 'e-icon-picker/dist/index.css';
+import 'font-awesome/css/font-awesome.min.css';
+
 // 国际化
 import 'dayjs/locale/zh-cn'
 const dayjs = require('dayjs');
@@ -30,6 +36,7 @@ Vue.filter('date', (date) => {
 
 Vue.use(Buefy)
 Vue.use(ElementUI);
+Vue.use(iconPicker, {FontAwesome: true, ElementUI: true, eIcon: true, eIconSymbol: true});
 
 Vue.config.productionTip = false
 

@@ -38,7 +38,7 @@ const routes = [
         },{
             path: '/menuMananager',
             name: 'd',
-            meta: {requireAuth: true},
+            meta: {title: '菜单管理'},
             component: () => import('@/components/Menu/MenuManager')
         },{
             path: '/2-2',

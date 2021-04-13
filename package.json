@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "darkreader": "^4.9.31",
     "dayjs": "^1.10.4",
+    "e-icon-picker": "^1.0.18",
     "element-ui": "^2.15.1",
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
