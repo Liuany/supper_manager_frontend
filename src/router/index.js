@@ -36,7 +36,7 @@ const routes = [
             meta: {requireAuth: true},
             component: () => import('@/views/error/404')
         },{
-            path: '/menuMananager',
+            path: '/menu',
             name: 'd',
             meta: {title: '菜单管理'},
             component: () => import('@/components/Menu/MenuManager')

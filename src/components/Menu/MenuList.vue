@@ -4,7 +4,7 @@
             <el-col :span="4">
                 <el-menu router
                          :default-active="this.$route.path"
-                         class="el-menu-vertical-demo"
+                         class="el-menu-vertical-de "
                          @open="handleOpen"
                          @close="handleClose">
                     <template>
@@ -28,7 +28,7 @@
                 </el-menu>
             </el-col>
             <el-col :span="20">
-                <router-view></router-view>
+                <router-view @postChildInfo="resetMenu"></router-view>
             </el-col>
         </el-row>
     </div>
@@ -47,6 +47,9 @@ export default {
     },
     created () {
         this.init()
+        this.$on('restMenu', function () {
+            alert('111')
+        })
     },
     methods: {
         init(){
@@ -106,6 +109,9 @@ export default {
                 nodes.push(groupNodeMap[i]);
             }
             return nodes
+        },
+        resetMenu: function (childInfo) {
+            this.init()
         }    
     }
 }

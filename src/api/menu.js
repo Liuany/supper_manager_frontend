@@ -38,3 +38,12 @@ export function delById (id) {
         params: {id: id}
     })
 }
+
+export function searchMenuByPage(pageNo, pageSize, data) {
+    return request({
+        url:'sys/menu/searchMenuByPage',
+        method:'post',
+        params: {pageNo:pageNo, pageSize:pageSize},
+        data: data
+    });
+}

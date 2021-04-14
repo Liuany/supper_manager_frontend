@@ -1,10 +1,11 @@
 <template>
     <div id="menu_list">
         <label>名称：
-            <el-input type="text" v-model="con" style="width: 166px;" placeholder="请输入要显示的内容"></el-input>
+            <el-input type="text" v-model="con.name" style="width: 166px;" placeholder="请输入要显示的内容"></el-input>
         </label>
-        <el-button @click="createInfo" type="primary" th:icon="el-icon-search" style="margin-left: 15px;">查询</el-button>
-        <el-button type="success" th:icon="el-icon-plus" v-on:click="createInfo">新增</el-button>
+        <el-button @click="search" type="primary" icon="el-icon-search" style="margin-left: 15px;">查询</el-button>
+        <el-button @click="resetSearch" type="success" icon="el-icon-refresh" style="margin-left: 15px;">重置</el-button>
+        <el-button type="danger" icon="el-icon-plus" v-on:click="createInfo">新增</el-button>
 
         <el-table :data="info" style="text-align: center; width: 100%;margin-top: 20px;" :border="true"
                   :stripe="true" :highlight-current-row="true">
@@ -12,15 +13,15 @@
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column prop="path" label="路径" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="isParent" label="是否父节点" :formatter="formatterIsParent"></el-table-column>
-            <el-table-column prop="pid" label="父节点"></el-table-column>
+            <el-table-column prop="isParent" label="是否根节点" :formatter="formatterIsParent"></el-table-column>
+            <el-table-column prop="pname" label="父节点"></el-table-column>
             <el-table-column prop="icon" label="图标" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                    <el-button-group>
-                        <el-button @click="edit(scope.row)" size="small" type="primary" icon="el-icon-edit" style="margin-left: 10px;">编辑</el-button>
-                        <el-button @click="del(scope.row)" size="small" type="danger" icon="el-icon-delete" style="margin-left: 10px;">删除</el-button>
-                    </el-button-group>
+                    <el-row>
+                        <el-button @click="edit(scope.row)" size="small" type="primary" plain icon="el-icon-edit" style="margin-left: 10px;">编辑</el-button>
+                        <el-button @click="del(scope.row)" size="small" type="danger" plain icon="el-icon-delete" style="margin-left: 10px;">删除</el-button>
+                    </el-row>
                 </template>
             </el-table-column>
         </el-table>
@@ -31,10 +32,10 @@
             :total="page.total"
             :page.sync="page.current"
             :limit.sync="page.size"
-            @pagination="init"
+            @pagination="search"
         />
 
-        <el-dialog :title="dialogTitle" :visible.sync="dialogTableVisible" width="40%">
+        <el-dialog :title="dialogTitle" :visible.sync="dialogTableVisible" width="40%" @close="closeDialog('ruleForm')">
             <el-form 
                 ref="ruleForm"
                 :model="results" 
@@ -66,8 +67,8 @@
                 </el-form-item>
 
                 <el-form-item style="text-align: right;">
-                    <el-button v-if="dialogSave" type="success" @click="submitForm('ruleForm')">保存</el-button>
-                    <el-button @click="cancel">{{cancelTag}}</el-button>
+                    <el-button v-if="dialogSave" type="success" @click="save('ruleForm')">保存</el-button>
+                    <el-button @click="closeDialog('ruleForm')">{{cancelTag}}</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -78,20 +79,20 @@
     import { getMenuByPage,save } from '@/api/menu'
     import Pagination from '@/components/Pagination'
     import SelectTree from '@/components/Tree/TreeSelect.vue';
-    import { loadMenu, getByPid, delById } from '@/api/menu'
+    import { loadMenu, getByPid, delById, searchMenuByPage } from '@/api/menu'
 
     export default {
         name: "MenuManager",
         components: { Pagination,SelectTree },
         data() {
             return {
-                con: '',
+                con: {},
                 dialogTableVisible: false,
                 dialogTitle: '',
                 dialogSave: true,
                 seletTreeVisible: false,
                 cancelTag: '取消',
-                results:{isParent: "1"},
+                results:{},
                 info: [],
                 page: {
                     current: 1,
@@ -118,9 +119,6 @@
                     ],
                     isParent: [
                         {required: true, message: '请选择是否为父节点', trigger: 'blur'},
-                    ],
-                    icon: [
-                        {required: true, message: '请选择图标', trigger: 'blur'}
                     ]
                 },
             }
@@ -144,7 +142,6 @@
             createInfo: function () {
                 this.dialogTitle = '新增',
                 this.dialogTableVisible = true;
-                
             },
             init: function () {
                 getMenuByPage(this.page.current, this.page.size).then((response) => {
@@ -154,7 +151,6 @@
                     this.page.size = data.size
                     this.info = data.records
                 })
-                
             },
             initSelection: function () {
                 loadMenu().then((response) => {
@@ -165,11 +161,10 @@
             formatterIsParent: function (row) {
                 return row.isParent == '0' ? '否' : '是';
             },
-            submitForm: function (formName) {
-                console.log(formName)
+            save: function (formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        if(this.results.isParent == '1' && this.results.pid == undefined){
+                        if(this.results.isParent == '0' && this.results.pid == undefined){
                             this.$message({
                                     message: '请选择父节点',
                                     type: 'error'
@@ -181,21 +176,28 @@
                                     type: 'success',
                                     duration: 2000,
                                 });
-                                this.cancel()
-                                this.init()
+                                //关闭窗口
+                                this.closeDialog(formName)
+                                //刷新页面
+                                this.refresh()
                             })
                         }
                     }
                 })
             },
-            cancel: function () {
+            closeDialog: function (formName) {
+                //清空表单
                 this.results = {}
+                // 重置表单
+                this.$refs[formName].resetFields()
+                //关闭窗口
                 this.dialogTableVisible = false
+                //隐藏父节点树形下拉框
+                this.seletTreeVisible = false
             },
             // 取值
             getValue(value){
                 this.results.pid = value;
-                console.log(this.results.pid);
             },
             changeSelect: function (value) {
                 if ("0" == value) {
@@ -206,8 +208,12 @@
             },
             edit: function (row) {
                 this.dialogTitle = '编辑'
-                this.results = row
+                // 这一句是关键！！使用this.results = row的方式会使编辑行的数据发生变化
+                this.results = Object.assign({}, row)
                 this.dialogTableVisible = true
+                if ('0' == row.isParent) {
+                    this.seletTreeVisible = true
+                }
             },
             del: function (row) {
                 this.$confirm('此操作将删除本级菜单, 是否继续?', '提示', {
@@ -231,6 +237,10 @@
                                         message: '删除成功',
                                         type: 'success'
                                     });
+                                    //刷新页面
+                                    this.init()
+                                    //刷新导航栏菜单
+                                    this.refresh()
                                 } else {
                                     this.$message({
                                         message: '删除失败',
@@ -241,8 +251,36 @@
                         }
                     })
                 }).catch(() => {
-                    //几点取消的提示
+                    //取消的提示
                 });
+            },
+            search: function () {
+                if (JSON.stringify(this.con) !== "{}") {
+                    searchMenuByPage(this.page.current, this.page.size,this.con).then((response) => {
+                        const { data } = response
+                        this.page.current = data.current
+                        this.page.total = data.total
+                        this.page.size = data.size
+                        this.info = data.records
+                    })
+                }else{
+                    this.init()
+                }
+            },
+            refresh: function () {
+                //刷新页面
+                this.init()
+                //刷新菜单导航
+                this.$emit('postChildInfo')
+            },
+            resetSearch: function () {
+                //重置查询条件
+                this.con = {}
+                //重置page
+                this.page.current = 1
+                this.page.size = 10
+                //刷新数据
+                this.init()
             }
         }
     }

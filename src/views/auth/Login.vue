@@ -22,7 +22,7 @@
                             <el-input v-model="ruleForm.passWord" type="password" autocomplete="off"/>
                         </el-form-item>
 
-                        <el-form-item label="记住密码" prop="delivery">
+                        <el-form-item label="记住密码" prop="rememberMe">
                             <el-switch v-model="ruleForm.rememberMe"></el-switch>
                         </el-form-item>
 
