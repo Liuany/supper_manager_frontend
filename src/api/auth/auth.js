@@ -26,6 +26,15 @@ export function getUserInfo() {
     });
 }
 
+//获取路由
+export function getRoutes(userDTO) {
+    return request({
+        url: '/sm/user/getRoutes',
+        method: 'post',
+        data: userDTO
+    });
+}
+
 // 注销
 export function logout() {
     return request({

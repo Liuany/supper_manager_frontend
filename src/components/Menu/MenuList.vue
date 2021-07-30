@@ -55,6 +55,7 @@ export default {
         init(){
             loadMenu().then((response) => {
                 const { data } = response
+                console.log(data);
                 this.menuList  = this.formateMenu(data)
             })
         },
@@ -108,6 +109,7 @@ export default {
             for ( var i in groupNodeMap) {
                 nodes.push(groupNodeMap[i]);
             }
+            console.log(nodes);
             return nodes
         },
         resetMenu: function (childInfo) {

@@ -1,9 +1,13 @@
-import { getUserInfo, login, logout } from "@/api/auth/auth";
-import {getToken, setToken, removeToken} from "@/utils/auth"
+import { getUserInfo, login, logout, getRoutes } from "@/api/auth/auth"
+import {getToken, setToken, removeToken, setRoutes} from "@/utils/auth"
+import { getAsyncRoutes } from '@/utils/asyncRouter'
+
+import router from '@/router'
 
 const state = {
     token: getToken(),    //token
     user: "",   //用户对象
+    routes: []  //路由
 }
 
 const mutations = {
@@ -12,6 +16,9 @@ const mutations = {
     },
     SET_USER_STATE: (state, user) => {
         state.user = user
+    },
+    SET_ROUTES_STATE: (state, routes) => {
+        state.routes = routes
     }
 }
 
@@ -64,8 +71,64 @@ const actions = {
             })
             .catch((error) => {
                 reject(error);
-              });
+            });
         });
+    },
+
+    //存储路由
+    addRoutes( {commit} ) {
+        return new Promise((resolve) => {
+            // getRoutes(userInfo)
+            //   .then((response) => {
+            //       const { data } = response
+            //       //将动态路由存入store中
+            //       commit("SET_ROUTES_STATE", data)
+            //       //将路由数据存入cookie中
+            //       setRoutes(data.token)
+            //       resolve()
+            //   })
+            //   .catch((error) => {
+            //     reject(error)
+            // })
+
+            const routerList = [
+                {
+                    "path": "/",
+                    "component": "views/Home",
+                    "redirect": "/memberInfo",
+                    "name": "Home",
+                    "meta": {
+                        "title": "首页",
+                    },
+                    "children": [
+                        {
+                            "path": "/member/memberInfo",
+                            "component": "components/MemberInfo/MemberInfo",
+                            "name": "MemberInfo",
+                            "meta": { "title": "会员管理" }
+                        },
+                        {
+                            "path": "/config/menu",
+                            "component": "components/Menu/MenuManager",
+                            "name": "menu",
+                            "meta": { "title": "菜单管理", "noCache": "menu" }
+                        },
+                        {
+                            "path": "/staff/staffInfo",
+                            "component": "components/Staff/StaffInfo",
+                            "name": "menu",
+                            "meta": { "title": "菜单管理", "noCache": "menu" }
+                        },
+                    ]
+                }
+            ]
+
+            //将动态路由存入store中
+            commit("SET_ROUTES_STATE", routerList)
+            //将路由数据存入cookie中
+            setRoutes(routerList)
+            resolve()
+        })
     }
 }
 

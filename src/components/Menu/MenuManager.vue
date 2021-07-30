@@ -40,8 +40,7 @@
                 ref="ruleForm"
                 :model="results" 
                 label-width="100px" 
-                :rules="rules"
-            >
+                :rules="rules">
                 <el-form-item label="名称：" prop="name" label-width="120px">
                     <el-input v-model="results.name"></el-input>
                 </el-form-item>
@@ -175,7 +174,7 @@
                                     message: '保存成功',
                                     type: 'success',
                                     duration: 2000,
-                                });
+                                })
                                 //关闭窗口
                                 this.closeDialog(formName)
                                 //刷新页面
@@ -204,6 +203,7 @@
                     this.seletTreeVisible = true
                 } else {
                     this.seletTreeVisible = false
+                     this.results.pid = '0'
                 }
             },
             edit: function (row) {

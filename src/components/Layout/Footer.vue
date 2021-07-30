@@ -1,6 +1,6 @@
 <template>
   <footer class="footer has-text-grey-light has-background-grey-darker">
-    <div class="container">
+    <div class="container" >
       <div>
         <div style="float: left;text-align">
             <span style="margin-right:20px;margin-left:320px;">{{ title }} ALL RIGHTS RESERVED</span>

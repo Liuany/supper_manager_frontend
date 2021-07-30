@@ -18,6 +18,11 @@ export function removeToken() {
     return Cookies.remove(uToken)
 }
 
+//设置路由
+export function setRoutes(routes) {
+    return Cookies.set(routes, routes)
+}
+
 export function removeAll() {
     return Cookies.Cookies.removeAll()
 }
