@@ -5,7 +5,7 @@ export function getStaffInfo(pageNo, size) {
         url:'sm/staff/getListByPage',
         method:'get',
         params: { pageNo: pageNo, size: size }
-    });
+    })
 }
 
 export function save(data) {
@@ -13,7 +13,7 @@ export function save(data) {
         url:'sm/staff/save',
         method:'post',
         data: data
-    });
+    })
 }
 
 export function delById (id) {
@@ -30,5 +30,5 @@ export function searchStaffByPage(pageNo, pageSize, data) {
         method:'post',
         params: {pageNo:pageNo, pageSize:pageSize},
         data: data
-    });
+    })
 }

@@ -119,6 +119,12 @@ const actions = {
                             "name": "menu",
                             "meta": { "title": "菜单管理", "noCache": "menu" }
                         },
+                        {
+                            "path": "/finance/dailyIcome",
+                            "component": "components/Finance/DailyIcomeList",
+                            "name": "menu",
+                            "meta": { "title": "菜单管理", "noCache": "menu" }
+                        }
                     ]
                 }
             ]
